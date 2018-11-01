@@ -12,20 +12,22 @@ library(tseries)
 library("urca") 
 
 
-BITCOIN <- na.omit(read_excel("C:/Econometria/Bitcoin.xls"))
+Bitcoin <- na.omit(read_excel("C:/Econometria/Bitcoin.xls"))
 
-Bitcoin <-  ts(BITCOIN$Close, start = 2014, frequency = 365)
+Bitcoin <-  ts(Bitcoin$Close, start = 2014, frequency = 365)
 
-plot(Bicoin)
+plot(Bitcoin)
 
 #Verificar se a Série é Estacionária
 
+A s�rie n�o � estacion�ria
+
 #Criar FAC  e FACP
 
-acf(BITCOIN$Close,lend=2, lwd=5,col="darkblue",main= "Função Autocorrelação - FAC")              #Melhorando aspecto da FAC
+acf(Bitcoin$Close,lend=2, lwd=5,col="darkblue",main= "Funcao Autocorrelaco - FAC")              #Melhorando aspecto da FAC
 axis(1,tck = 1, col = "lightgrey", lty = "dotted")
 
-pacf(BITCOIN$Close,lend=60, lwd=5,col="darkblue",main= "Função Autocorrelação Parcial - FACP")   #Melhorando aspecto da PAC
+pacf(Bitcoin$Close,lend=60, lwd=5,col="darkblue",main= "Função Autocorrelação Parcial - FACP")   #Melhorando aspecto da PAC
 axis(1,tck = 1, col = "lightgrey", lty = "dotted")
 
 #Teste ADF
@@ -39,11 +41,13 @@ kpss.test(Bitcoin)
 
 #Se não for estacionária, diferenciar a série
 
-IntOrdem1 <- diff(BITCOIN$Close)
+IntOrdem1 <- diff(Bitcoin$Close)
 IntegradaOrdem1 <- ts(IntOrdem1, start = 2014, frequency = 365)
 plot(IntegradaOrdem1)
 
 #Verificar se a Série se tornou Estacionária
+
+Devido a diferen�a que foi feita dentre o modelo, o mesmo ficou estacion�rio com a diferen�a de 1
 
 #FAC e FACP
 
@@ -65,10 +69,13 @@ kpss.test(IntegradaOrdem1)
 
 #Verificar quais ordens são as melhores
 
+ARIMA (19,1,32)
+
 #Estimando Regressões e Tabelando Resultados - Exemplo
 
 AR2 <- arima(var_PIB, order = c(2,0,0))
 
+MA1 <- arima(var_PIB, order = c(0,0,1))
 MA2 <- arima(var_PIB, order = c(0,0,2))
 MA3 <- arima(var_PIB, order = c(0,0,3))
 MA4 <- arima(var_PIB, order = c(0,0,4))
@@ -77,6 +84,7 @@ MA6 <- arima(var_PIB, order = c(0,0,6))
 MA7 <- arima(var_PIB, order = c(0,0,7))
 MA8 <- arima(var_PIB, order = c(0,0,8))
 MA9 <- arima(var_PIB, order = c(0,0,9))
+MA10 <- arima(var_PIB, order = c(0,0,10))
 
 ARMA12 <- arima(var_PIB, order = c(1,0,2))
 ARMA13 <- arima(var_PIB, order = c(1,0,3))
@@ -86,6 +94,7 @@ ARMA16 <- arima(var_PIB, order = c(1,0,6))
 ARMA17 <- arima(var_PIB, order = c(1,0,7))
 ARMA18 <- arima(var_PIB, order = c(1,0,8))
 ARMA19 <- arima(var_PIB, order = c(1,0,9))
+ARMA10 <- arima(var_PIB, order = c(1,0,9))
 
 ARMA21 <- arima(var_PIB, order = c(2,0,1))
 ARMA22 <- arima(var_PIB, order = c(2,0,2))
@@ -98,7 +107,7 @@ ARMA28 <- arima(var_PIB, order = c(2,0,8))
 ARMA29 <- arima(var_PIB, order = c(2,0,9))
 
 estimacoes <- list(AR1, AR2, MA1, MA2, MA3, MA4, MA5, MA6, MA7, MA8, MA9, 
-                   ARMA11,ARMA12, ARMA13, ARMA14,ARMA15, ARMA16,ARMA17,ARMA18,ARMA19,
+                   ARMA10,ARMA12, ARMA13, ARMA14,ARMA15, ARMA16,ARMA17,ARMA18,ARMA19,
                    ARMA21,ARMA22,ARMA23,ARMA24,ARMA25,ARMA26,ARMA27,ARMA28,ARMA29)      #Cria uma lista com os estimadores
 sapply(estimacoes, AIC)                 #Aplica o comando AIC na lista
 sapply(estimacoes, BIC)                 #Aplica o comando BIC na lista
